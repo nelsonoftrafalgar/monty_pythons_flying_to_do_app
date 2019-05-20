@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { ControlPanel } from './containers/ControlPanel/ControlPanel'
 import { List } from './containers/List/List'
@@ -14,10 +14,22 @@ const App: React.FC = () => {
 
   const [addedSketches, setAddedSketches] = useState<number>(0)
   const [sketches, setSketches] = useState<ISketch[]>([])
+  const [sketchLimit, setSketchLimit] = useState<boolean>(false)
+  const [watchedSketches, setWatchedSketches] = useState<number>(0)
 
   const random = Math.floor(Math.random() * data.length)
 
+  useEffect(() => {
+    if (sketches.length < 10) {
+      setSketchLimit(false)
+    }
+  }, [sketches])
+
   const handleAddSketch = () => {
+    if (sketches.length === 10) {
+      setSketchLimit(true)
+      return
+    }
     const newSketch = {
       name: data[random],
       checked: false
@@ -35,17 +47,17 @@ const App: React.FC = () => {
   }
 
   const handleCheck = (e: React.FormEvent<HTMLInputElement>) => {
-    const name = e.currentTarget.value
+    const { checked, value } = e.currentTarget
     const updatedList = sketches.map((sketch) => {
-      if (sketch.name === name) {
+      if (sketch.name === value) {
         return {
           ...sketch,
-          checked: !sketch.checked
+          checked
         }
       }
       return sketch
     })
-
+    setWatchedSketches(checked ? watchedSketches + 1 : watchedSketches - 1)
     setSketches(updatedList)
   }
 
@@ -65,11 +77,13 @@ const App: React.FC = () => {
         handleClearList={handleClearList}
         addedSketches={addedSketches}
         currentSketches={currentSketches}
+        watchedSketches={watchedSketches}
       />
       <List
         sketches={sketches}
         handleCheck={handleCheck}
         handleRemove={handleRemove}
+        sketchLimit={sketchLimit}
       />
     </div>
   )

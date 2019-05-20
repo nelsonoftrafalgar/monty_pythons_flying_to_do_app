@@ -4,11 +4,12 @@ import styles from './List.module.css'
 
 interface IListProps {
   sketches: ISketch[]
+  sketchLimit: boolean
   handleCheck: (e: React.FormEvent<HTMLInputElement>) => void
   handleRemove: (name: string) => (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
-const List: React.FC<IListProps> = ({ sketches, handleCheck, handleRemove }) => {
+const List: React.FC<IListProps> = ({ sketches, handleCheck, handleRemove, sketchLimit }) => {
 
   const sketchList = sketches.map((sketch: ISketch) => {
     const { name, checked } = sketch
@@ -26,6 +27,9 @@ const List: React.FC<IListProps> = ({ sketches, handleCheck, handleRemove }) => 
   return (
     <div className={styles.container}>
       <ul>{sketchList}</ul>
+      {sketchLimit &&
+        <p>That's, that's enough sketches for now lad</p>
+      }
     </div>
   )
 }

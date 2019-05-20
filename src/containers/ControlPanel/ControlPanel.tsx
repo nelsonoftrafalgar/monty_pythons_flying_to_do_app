@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './ControlPanel.module.css'
 
 interface IContolPanelProps {
+  watchedSketches: number
   addedSketches: number
   currentSketches: number
   handleAddSketch: () => void
@@ -14,7 +15,8 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
   addedSketches,
   handleClearList,
   handleUndoAddSketch,
-  handleAddSketch
+  handleAddSketch,
+  watchedSketches
 }) => {
 
   return (
@@ -24,6 +26,7 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
       <button onClick={handleClearList}>Clear List</button>
       <span>Total added sketches: {addedSketches}</span>
       <span>Currently added sketches: {currentSketches}</span>
+      <span>Watched sketches: {watchedSketches}</span>
     </div>
   )
 }
