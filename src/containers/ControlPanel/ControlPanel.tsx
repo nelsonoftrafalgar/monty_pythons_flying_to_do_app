@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './ControlPanel.module.css'
 
 interface IContolPanelProps {
+  sortBy: string
   watchedSketches: number
   addedSketches: number
   currentSketches: number
@@ -9,6 +10,7 @@ interface IContolPanelProps {
   handleUndoAddSketch: () => void
   handleClearList: () => void
   handleArchiveToggle: () => void
+  handleSort: (e: React.FormEvent<HTMLInputElement>) => void
 }
 
 const ControlPanel: React.FC<IContolPanelProps> = ({
@@ -18,7 +20,9 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
   handleUndoAddSketch,
   handleAddSketch,
   handleArchiveToggle,
-  watchedSketches
+  watchedSketches,
+  sortBy,
+  handleSort
 }) => {
 
   return (
@@ -30,6 +34,11 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
       <span>Total added sketches: {addedSketches}</span>
       <span>Currently added sketches: {currentSketches}</span>
       <span>Watched sketches: {watchedSketches}</span>
+      <p>Sort archive by:</p>
+      <label><input type="radio" value="date-asc" checked={"date-asc" === sortBy} onChange={handleSort} /> Date ascending</label>
+      <label><input type="radio" value="date-desc" checked={"date-desc" === sortBy} onChange={handleSort} /> Date descending</label>
+      <label><input type="radio" value="rate-asc" checked={"rate-asc" === sortBy} onChange={handleSort} /> Rating ascending</label>
+      <label><input type="radio" value="rate-desc" checked={"rate-desc" === sortBy} onChange={handleSort} /> Rating descending</label>
     </div>
   )
 }
