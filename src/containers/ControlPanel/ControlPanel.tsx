@@ -22,7 +22,7 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
   handleArchiveToggle,
   watchedSketches,
   sortBy,
-  handleSort
+  handleSort,
 }) => {
 
   return (

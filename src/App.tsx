@@ -43,9 +43,24 @@ const App: React.FC = () => {
   const [sketchLimit, setSketchLimit] = useState<boolean>(false)
   const [watchedSketches, setWatchedSketches] = useState<number>(0)
   const [sortBy, setSortBy] = useState<string>('')
+
   const [state, dispatch] = useReducer(archiveReducer, [])
 
   const random = Math.floor(Math.random() * data.length)
+
+  const updateStorage = () => localStorage.setItem("hui", JSON.stringify(sketches))
+
+  useEffect(() => {
+    const getSketches = JSON.parse(localStorage.getItem("hui") as string)
+    setSketches(getSketches)
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener("beforeunload", updateStorage)
+    return () => {
+      window.removeEventListener("beforeunload", updateStorage)
+    }
+  }, [sketches])
 
   useEffect(() => {
     setArchive((archive) => {
