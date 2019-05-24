@@ -11,7 +11,8 @@ type ArchiveReducerAction = { type: 'date-asc' } | { type: 'date-desc' } | { typ
 export interface ISketch {
   name: string
   checked: boolean
-  date: Date
+  date: string
+  time: string
   rating: string
 }
 
@@ -20,47 +21,58 @@ interface IArchive {
   list: ISketch[]
 }
 
+interface IGlobalSate {
+  addedSketches: number,
+  sketchLimit: boolean,
+  watchedSketches: number,
+  sortBy: string,
+}
+
 const App: React.FC = () => {
 
+  const [sketches, setSketches] = useState<ISketch[]>([])
+  const [globalState, setGlobalState] = useState<IGlobalSate>({
+    addedSketches: 0,
+    sketchLimit: false,
+    watchedSketches: 0,
+    sortBy: "",
+  })
+
+  const [archive, setArchive] = useState<IArchive>({
+    isVisible: false,
+    list: []
+  })
+
+  const { isVisible, list } = archive
+  const { addedSketches, sketchLimit, sortBy, watchedSketches } = globalState
+
+
   const archiveReducer = (state: ISketch[], action: ArchiveReducerAction) => {
+    const dateToNum = (date: string, time: string) => {
+      return +date
+        .split(".")
+        .reverse()
+        .concat(time.split(":"))
+        .reduce((acc, val) => acc + val)
+    }
+
     switch (action.type) {
       case 'date-asc':
-        return [...archive.list].sort((a, b) => a.date.getTime() - b.date.getTime())
+        return [...list].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
       case 'date-desc':
-        return [...archive.list].sort((a, b) => b.date.getTime() - a.date.getTime())
+        return [...list].sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
       case 'rate-asc':
-        return [...archive.list].sort((a, b) => +a.rating - +b.rating)
+        return [...list].sort((a, b) => +a.rating - +b.rating)
       case 'rate-desc':
-        return [...archive.list].sort((a, b) => +b.rating - +a.rating)
+        return [...list].sort((a, b) => +b.rating - +a.rating)
       default:
         return state
     }
   }
 
-  const [addedSketches, setAddedSketches] = useState<number>(0)
-  const [sketches, setSketches] = useState<ISketch[]>([])
-  const [archive, setArchive] = useState<IArchive>({ isVisible: false, list: [] })
-  const [sketchLimit, setSketchLimit] = useState<boolean>(false)
-  const [watchedSketches, setWatchedSketches] = useState<number>(0)
-  const [sortBy, setSortBy] = useState<string>('')
-
   const [state, dispatch] = useReducer(archiveReducer, [])
 
   const random = Math.floor(Math.random() * data.length)
-
-  const updateStorage = () => localStorage.setItem("hui", JSON.stringify(sketches))
-
-  useEffect(() => {
-    const getSketches = JSON.parse(localStorage.getItem("hui") as string)
-    setSketches(getSketches)
-  }, [])
-
-  useEffect(() => {
-    window.addEventListener("beforeunload", updateStorage)
-    return () => {
-      window.removeEventListener("beforeunload", updateStorage)
-    }
-  }, [sketches])
 
   useEffect(() => {
     setArchive((archive) => {
@@ -69,24 +81,52 @@ const App: React.FC = () => {
   }, [state])
 
   useEffect(() => {
+    const getSketches = JSON.parse(localStorage.getItem("sketches") as string)
+    const getArchive = JSON.parse(localStorage.getItem("archive") as string)
+    const getGlobalState = JSON.parse(localStorage.getItem("globalState") as string)
+    if (getSketches) {
+      setGlobalState(() => getGlobalState)
+      setSketches(getSketches)
+      setArchive(() => getArchive)
+    }
+  }, [])
+
+  useEffect(() => {
+    const updateStorage = () => {
+      localStorage.setItem("sketches", JSON.stringify(sketches))
+      localStorage.setItem("archive", JSON.stringify(archive))
+      localStorage.setItem("globalState", JSON.stringify(globalState))
+    }
+    window.addEventListener("beforeunload", updateStorage)
+    return () => {
+      window.removeEventListener("beforeunload", updateStorage)
+    }
+  }, [sketches, archive, globalState])
+
+
+
+  useEffect(() => {
     if (sketches.length < 10) {
-      setSketchLimit(false)
+      setGlobalState((globalState) => {
+        return { ...globalState, sketchLimit: false }
+      })
     }
   }, [sketches])
 
   const handleAddSketch = () => {
     if (sketches.length === 10) {
-      setSketchLimit(true)
+      setGlobalState({ ...globalState, sketchLimit: true })
       return
     }
     const newSketch = {
       name: data[random],
       checked: false,
-      date: new Date(),
+      date: '',
+      time: '',
       rating: ''
     }
     setSketches([...sketches, newSketch])
-    setAddedSketches(addedSketches + 1)
+    setGlobalState({ ...globalState, addedSketches: addedSketches + 1 })
   }
 
   const handleUndoAddSketch = () => {
@@ -108,7 +148,7 @@ const App: React.FC = () => {
       }
       return sketch
     })
-    setWatchedSketches(checked ? watchedSketches + 1 : watchedSketches - 1)
+    setGlobalState({ ...globalState, watchedSketches: checked ? watchedSketches + 1 : watchedSketches - 1 })
     setSketches(updatedList)
   }
 
@@ -116,14 +156,19 @@ const App: React.FC = () => {
     e.preventDefault()
     const removedElement = sketches.find((sketch) => sketch.name === name)
     if (removedElement && removedElement.checked) {
-      removedElement.date = new Date()
+      const date = new Date()
+      removedElement.date = date.toLocaleDateString()
+      removedElement.time = date.toLocaleTimeString()
       setArchive({ ...archive, list: [...archive.list, removedElement] })
     }
     const updatedList = sketches.filter((sketch) => sketch.name !== name)
     setSketches(updatedList)
   }
 
-  const handleArchiveToggle = () => setArchive({ ...archive, isVisible: !archive.isVisible })
+  const handleArchiveToggle = () => {
+
+    setArchive({ ...archive, isVisible: !isVisible })
+  }
 
   const handleRate = (name: string) => (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
@@ -138,12 +183,13 @@ const App: React.FC = () => {
 
   const handleSort = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
-    setSortBy(value)
+    setGlobalState({ ...globalState, sortBy: value })
     dispatch({ type: value } as ArchiveReducerAction)
   }
 
   const currentSketches = sketches.length
 
+  console.log(archive)
   return (
     <div className={styles.app}>
       <ControlPanel
@@ -157,8 +203,8 @@ const App: React.FC = () => {
         handleSort={handleSort}
         sortBy={sortBy}
       />
-      {archive.isVisible ?
-        <Archive archive={archive.list} /> :
+      {isVisible ?
+        <Archive archive={list} /> :
         <List
           sketches={sketches}
           handleCheck={handleCheck}

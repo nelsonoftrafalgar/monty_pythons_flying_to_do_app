@@ -8,7 +8,7 @@ interface IArchiveProps {
 
 const Archive: React.FC<IArchiveProps> = ({ archive }) => {
   const archivedSketches = archive.map((sketch) => {
-    const { name, date, rating } = sketch
+    const { name, date, time, rating } = sketch
     if (!date) {
       return sketch
     }
@@ -16,7 +16,7 @@ const Archive: React.FC<IArchiveProps> = ({ archive }) => {
     return (
       <li className={styles.listItem} key={name}>
         <p>{name}</p>
-        <p className={styles.date}>{date.toLocaleDateString()} {date.toLocaleTimeString()}</p>
+        <p className={styles.date}>{date} {time}</p>
         <p className={styles.rating}>{rating}</p>
       </li>
     )
