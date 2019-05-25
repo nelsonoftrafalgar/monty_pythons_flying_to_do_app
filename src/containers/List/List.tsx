@@ -1,6 +1,6 @@
 import { ISketch } from '../../App'
 import React from 'react'
-import styles from './List.module.css'
+import styles from './list.module.css'
 
 interface IListProps {
   sketches: ISketch[]

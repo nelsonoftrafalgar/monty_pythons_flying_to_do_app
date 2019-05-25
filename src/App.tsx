@@ -2,16 +2,17 @@ import React, { useReducer, useState } from 'react'
 
 import { Archive } from './containers/Archive/Archive'
 import { ControlPanel } from './containers/ControlPanel/ControlPanel'
+import { ControlPanelContext } from './context/ControlPanelContext'
 import { List } from './containers/List/List'
 import { data } from './db'
 import { dateToNum } from './helpers'
-import styles from './App.module.css'
+import styles from './app.module.css'
 import { useGetLocalStorage } from './customHooks/useGetLocalStorage'
 import { useRemoveSketchLimit } from './customHooks/useRemoveSketchLimit'
 import { useSetLocalStorage } from './customHooks/useSetLocalStorage'
 import { useSortArchive } from './customHooks/useSortArchive'
 
-type ArchiveReducerAction = {
+type ArchiveSortReducerAction = {
   type: 'date-asc' | 'date-desc' | 'rate-asc' | 'rate-desc'
 }
 
@@ -54,7 +55,7 @@ const App: React.FC = () => {
   const { addedSketches, sketchLimit, sortBy, watchedSketches } = globalState
 
 
-  const archiveSortReducer = (state: ISketch[], action: ArchiveReducerAction) => {
+  const archiveSortReducer = (state: ISketch[], action: ArchiveSortReducerAction) => {
     switch (action.type) {
       case 'date-asc':
         return [...list].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
@@ -148,7 +149,7 @@ const App: React.FC = () => {
   const handleSort = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
     setGlobalState({ ...globalState, sortBy: value })
-    dispatch({ type: value } as ArchiveReducerAction)
+    dispatch({ type: value } as ArchiveSortReducerAction)
   }
 
   const handleReset = () => {
@@ -167,18 +168,20 @@ const App: React.FC = () => {
 
   return (
     <div className={styles.app}>
-      <ControlPanel
-        handleAddSketch={handleAddSketch}
-        handleUndoAddSketch={handleUndoAddSketch}
-        handleClearList={handleClearList}
-        handleArchiveToggle={handleArchiveToggle}
-        addedSketches={addedSketches}
-        currentSketches={currentSketches}
-        watchedSketches={watchedSketches}
-        handleSort={handleSort}
-        sortBy={sortBy}
-        handleReset={handleReset}
-      />
+      <ControlPanelContext.Provider value={{
+        handleAddSketch,
+        handleUndoAddSketch,
+        handleClearList,
+        handleArchiveToggle,
+        addedSketches,
+        currentSketches,
+        watchedSketches,
+        handleSort,
+        sortBy,
+        handleReset
+      }}>
+        <ControlPanel />
+      </ControlPanelContext.Provider>
       {isVisible ?
         <Archive archive={list} /> :
         <List

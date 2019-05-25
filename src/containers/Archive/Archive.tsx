@@ -1,6 +1,6 @@
 import { ISketch } from '../../App'
 import React from 'react'
-import styles from './Archive.module.css'
+import styles from './archive.module.css'
 
 interface IArchiveProps {
   archive: ISketch[]
