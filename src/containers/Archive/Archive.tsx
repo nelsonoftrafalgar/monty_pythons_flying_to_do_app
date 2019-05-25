@@ -9,9 +9,6 @@ interface IArchiveProps {
 const Archive: React.FC<IArchiveProps> = ({ archive }) => {
   const archivedSketches = archive.map((sketch) => {
     const { name, date, time, rating } = sketch
-    if (!date) {
-      return sketch
-    }
 
     return (
       <li className={styles.listItem} key={name}>

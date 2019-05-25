@@ -11,6 +11,7 @@ interface IContolPanelProps {
   handleClearList: () => void
   handleArchiveToggle: () => void
   handleSort: (e: React.FormEvent<HTMLInputElement>) => void
+  handleReset: () => void
 }
 
 const ControlPanel: React.FC<IContolPanelProps> = ({
@@ -23,6 +24,7 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
   watchedSketches,
   sortBy,
   handleSort,
+  handleReset,
 }) => {
 
   return (
@@ -31,6 +33,7 @@ const ControlPanel: React.FC<IContolPanelProps> = ({
       <button onClick={handleUndoAddSketch}>Undo Add Sketch</button>
       <button onClick={handleClearList}>Clear List</button>
       <button onClick={handleArchiveToggle}>Toggle Archive</button>
+      <button onClick={handleReset}>Master reset</button>
       <span>Total added sketches: {addedSketches}</span>
       <span>Currently added sketches: {currentSketches}</span>
       <span>Watched sketches: {watchedSketches}</span>

@@ -1,12 +1,19 @@
-import React, { useEffect, useReducer, useState } from 'react'
+import React, { useReducer, useState } from 'react'
 
 import { Archive } from './containers/Archive/Archive'
 import { ControlPanel } from './containers/ControlPanel/ControlPanel'
 import { List } from './containers/List/List'
 import { data } from './db'
+import { dateToNum } from './helpers'
 import styles from './App.module.css'
+import { useGetLocalStorage } from './customHooks/useGetLocalStorage'
+import { useRemoveSketchLimit } from './customHooks/useRemoveSketchLimit'
+import { useSetLocalStorage } from './customHooks/useSetLocalStorage'
+import { useSortArchive } from './customHooks/useSortArchive'
 
-type ArchiveReducerAction = { type: 'date-asc' } | { type: 'date-desc' } | { type: 'rate-asc' } | { type: 'rate-desc' }
+type ArchiveReducerAction = {
+  type: 'date-asc' | 'date-desc' | 'rate-asc' | 'rate-desc'
+}
 
 export interface ISketch {
   name: string
@@ -16,12 +23,12 @@ export interface ISketch {
   rating: string
 }
 
-interface IArchive {
+export interface IArchive {
   isVisible: boolean
   list: ISketch[]
 }
 
-interface IGlobalSate {
+export interface IGlobalSate {
   addedSketches: number,
   sketchLimit: boolean,
   watchedSketches: number,
@@ -47,15 +54,7 @@ const App: React.FC = () => {
   const { addedSketches, sketchLimit, sortBy, watchedSketches } = globalState
 
 
-  const archiveReducer = (state: ISketch[], action: ArchiveReducerAction) => {
-    const dateToNum = (date: string, time: string) => {
-      return +date
-        .split(".")
-        .reverse()
-        .concat(time.split(":"))
-        .reduce((acc, val) => acc + val)
-    }
-
+  const archiveSortReducer = (state: ISketch[], action: ArchiveReducerAction) => {
     switch (action.type) {
       case 'date-asc':
         return [...list].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
@@ -70,48 +69,13 @@ const App: React.FC = () => {
     }
   }
 
-  const [state, dispatch] = useReducer(archiveReducer, [])
-
+  const [state, dispatch] = useReducer(archiveSortReducer, [])
   const random = Math.floor(Math.random() * data.length)
 
-  useEffect(() => {
-    setArchive((archive) => {
-      return { ...archive, list: state }
-    })
-  }, [state])
-
-  useEffect(() => {
-    const getSketches = JSON.parse(localStorage.getItem("sketches") as string)
-    const getArchive = JSON.parse(localStorage.getItem("archive") as string)
-    const getGlobalState = JSON.parse(localStorage.getItem("globalState") as string)
-    if (getSketches) {
-      setGlobalState(() => getGlobalState)
-      setSketches(getSketches)
-      setArchive(() => getArchive)
-    }
-  }, [])
-
-  useEffect(() => {
-    const updateStorage = () => {
-      localStorage.setItem("sketches", JSON.stringify(sketches))
-      localStorage.setItem("archive", JSON.stringify(archive))
-      localStorage.setItem("globalState", JSON.stringify(globalState))
-    }
-    window.addEventListener("beforeunload", updateStorage)
-    return () => {
-      window.removeEventListener("beforeunload", updateStorage)
-    }
-  }, [sketches, archive, globalState])
-
-
-
-  useEffect(() => {
-    if (sketches.length < 10) {
-      setGlobalState((globalState) => {
-        return { ...globalState, sketchLimit: false }
-      })
-    }
-  }, [sketches])
+  useSortArchive(setArchive, state)
+  useGetLocalStorage(setGlobalState, setSketches, setArchive)
+  useSetLocalStorage(sketches, archive, globalState)
+  useRemoveSketchLimit(sketches, setGlobalState)
 
   const handleAddSketch = () => {
     if (sketches.length === 10) {
@@ -187,9 +151,20 @@ const App: React.FC = () => {
     dispatch({ type: value } as ArchiveReducerAction)
   }
 
+  const handleReset = () => {
+    localStorage.clear()
+    setSketches([])
+    setArchive({ isVisible: false, list: [] })
+    setGlobalState({
+      addedSketches: 0,
+      sketchLimit: false,
+      watchedSketches: 0,
+      sortBy: "",
+    })
+  }
+
   const currentSketches = sketches.length
 
-  console.log(archive)
   return (
     <div className={styles.app}>
       <ControlPanel
@@ -202,6 +177,7 @@ const App: React.FC = () => {
         watchedSketches={watchedSketches}
         handleSort={handleSort}
         sortBy={sortBy}
+        handleReset={handleReset}
       />
       {isVisible ?
         <Archive archive={list} /> :

@@ -17,6 +17,7 @@ const List: React.FC<IListProps> = ({ sketches, handleCheck, handleRemove, sketc
     return (
       <li className={styles.listItem} key={name}>
         <label>
+          Watched?
           <input type='checkbox' value={name} checked={checked} onChange={handleCheck} />
           {name}
         </label>
@@ -30,7 +31,7 @@ const List: React.FC<IListProps> = ({ sketches, handleCheck, handleRemove, sketc
             value={rating}
           />
         </label>
-        <button onClick={handleRemove(name)}>Remove</button>
+        <button onClick={handleRemove(name)}>{checked ? 'Add to Archive' : 'Remove'}</button>
       </li>
     )
   })
