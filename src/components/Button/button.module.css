@@ -1,0 +1,20 @@
+@import '../../var.css';
+
+.button {
+  border-radius: 50px;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background: #3c4f59;
+  color: var(--font-color);
+  margin: 5px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.button:hover {
+  color: #3c4f59;
+  background: var(--font-color);
+}

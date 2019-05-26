@@ -1,16 +1,16 @@
-import { ISketch } from '../../App'
-import React from 'react'
+import React, { useContext } from 'react'
+
+import { ContentContext } from '../../context/ContentContext';
 import styles from './list.module.css'
 
-interface IListProps {
-  sketches: ISketch[]
-  sketchLimit: boolean
-  handleCheck: (e: React.FormEvent<HTMLInputElement>) => void
-  handleRate: (name: string) => (e: React.FormEvent<HTMLInputElement>) => void
-  handleRemove: (name: string) => (e: React.MouseEvent<HTMLButtonElement>) => void
-}
-
-const List: React.FC<IListProps> = ({ sketches, handleCheck, handleRemove, sketchLimit, handleRate }) => {
+const List: React.FC = () => {
+  const {
+    sketches,
+    handleCheck,
+    handleRemove,
+    sketchLimit,
+    handleRate
+  } = useContext(ContentContext)
 
   const sketchList = sketches.map((sketch) => {
     const { name, checked, rating } = sketch

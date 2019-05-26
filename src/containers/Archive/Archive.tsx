@@ -1,13 +1,11 @@
-import { ISketch } from '../../App'
-import React from 'react'
+import React, { useContext } from 'react'
+
+import { ContentContext } from '../../context/ContentContext';
 import styles from './archive.module.css'
 
-interface IArchiveProps {
-  archive: ISketch[]
-}
-
-const Archive: React.FC<IArchiveProps> = ({ archive }) => {
-  const archivedSketches = archive.map((sketch) => {
+const Archive: React.FC = () => {
+  const { archiveList } = useContext(ContentContext)
+  const archivedSketches = archiveList.map((sketch) => {
     const { name, date, time, rating } = sketch
 
     return (

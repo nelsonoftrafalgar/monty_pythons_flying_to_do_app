@@ -1,17 +1,20 @@
 import React, { useContext } from 'react'
 
 import { ControlPanelContext } from '../../context/ControlPanelContext'
+import { SortOption } from '../SortOption.tsx/SortOption'
+import { Title } from '../Title/Title'
+import styles from './sortSection.module.css'
 
 const SortSection = () => {
   const { sortBy, handleSort } = useContext(ControlPanelContext)
 
   return (
-    <div>
-      <p>Sort archive by:</p>
-      <label><input type="radio" value="date-asc" checked={"date-asc" === sortBy} onChange={handleSort} /> Date ascending</label>
-      <label><input type="radio" value="date-desc" checked={"date-desc" === sortBy} onChange={handleSort} /> Date descending</label>
-      <label><input type="radio" value="rate-asc" checked={"rate-asc" === sortBy} onChange={handleSort} /> Rating ascending</label>
-      <label><input type="radio" value="rate-desc" checked={"rate-desc" === sortBy} onChange={handleSort} /> Rating descending</label>
+    <div className={styles.container}>
+      <Title text='Archive sort' />
+      <SortOption value='date-asc' sortBy={sortBy} handler={handleSort} text='Date ascending' />
+      <SortOption value='date-desc' sortBy={sortBy} handler={handleSort} text='Date descending' />
+      <SortOption value='rate-asc' sortBy={sortBy} handler={handleSort} text='Rating ascending' />
+      <SortOption value='rate-desc' sortBy={sortBy} handler={handleSort} text='Rating descending' />
     </div>
   )
 }

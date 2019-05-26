@@ -1,9 +1,9 @@
 import React, { useReducer, useState } from 'react'
 
-import { Archive } from './containers/Archive/Archive'
+import { Content } from './containers/Content/Content'
+import { ContentContext } from './context/ContentContext'
 import { ControlPanel } from './containers/ControlPanel/ControlPanel'
 import { ControlPanelContext } from './context/ControlPanelContext'
-import { List } from './containers/List/List'
 import { data } from './db'
 import { dateToNum } from './helpers'
 import styles from './app.module.css'
@@ -26,7 +26,7 @@ export interface ISketch {
 
 export interface IArchive {
   isVisible: boolean
-  list: ISketch[]
+  archiveList: ISketch[]
 }
 
 export interface IGlobalSate {
@@ -48,23 +48,23 @@ const App: React.FC = () => {
 
   const [archive, setArchive] = useState<IArchive>({
     isVisible: false,
-    list: []
+    archiveList: []
   })
 
-  const { isVisible, list } = archive
+  const { isVisible, archiveList } = archive
   const { addedSketches, sketchLimit, sortBy, watchedSketches } = globalState
 
 
   const archiveSortReducer = (state: ISketch[], action: ArchiveSortReducerAction) => {
     switch (action.type) {
       case 'date-asc':
-        return [...list].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
+        return [...archiveList].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
       case 'date-desc':
-        return [...list].sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
+        return [...archiveList].sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
       case 'rate-asc':
-        return [...list].sort((a, b) => +a.rating - +b.rating)
+        return [...archiveList].sort((a, b) => +a.rating - +b.rating)
       case 'rate-desc':
-        return [...list].sort((a, b) => +b.rating - +a.rating)
+        return [...archiveList].sort((a, b) => +b.rating - +a.rating)
       default:
         return state
     }
@@ -124,7 +124,7 @@ const App: React.FC = () => {
       const date = new Date()
       removedElement.date = date.toLocaleDateString()
       removedElement.time = date.toLocaleTimeString()
-      setArchive({ ...archive, list: [...archive.list, removedElement] })
+      setArchive({ ...archive, archiveList: [...archive.archiveList, removedElement] })
     }
     const updatedList = sketches.filter((sketch) => sketch.name !== name)
     setSketches(updatedList)
@@ -155,7 +155,7 @@ const App: React.FC = () => {
   const handleReset = () => {
     localStorage.clear()
     setSketches([])
-    setArchive({ isVisible: false, list: [] })
+    setArchive({ isVisible: false, archiveList: [] })
     setGlobalState({
       addedSketches: 0,
       sketchLimit: false,
@@ -168,30 +168,33 @@ const App: React.FC = () => {
 
   return (
     <div className={styles.app}>
-      <ControlPanelContext.Provider value={{
-        handleAddSketch,
-        handleUndoAddSketch,
-        handleClearList,
-        handleArchiveToggle,
-        addedSketches,
-        currentSketches,
-        watchedSketches,
-        handleSort,
-        sortBy,
-        handleReset
-      }}>
-        <ControlPanel />
-      </ControlPanelContext.Provider>
-      {isVisible ?
-        <Archive archive={list} /> :
-        <List
-          sketches={sketches}
-          handleCheck={handleCheck}
-          handleRemove={handleRemove}
-          sketchLimit={sketchLimit}
-          handleRate={handleRate}
-        />
-      }
+      <div className={styles.container}>
+        <ControlPanelContext.Provider value={{
+          handleAddSketch,
+          handleUndoAddSketch,
+          handleClearList,
+          handleArchiveToggle,
+          addedSketches,
+          currentSketches,
+          watchedSketches,
+          handleSort,
+          sortBy,
+          handleReset
+        }}>
+          <ControlPanel />
+        </ControlPanelContext.Provider>
+        <ContentContext.Provider value={{
+          isVisible,
+          archiveList,
+          sketchLimit,
+          sketches,
+          handleCheck,
+          handleRate,
+          handleRemove
+        }}>
+          <Content />
+        </ContentContext.Provider>
+      </div>
     </div>
   )
 }
