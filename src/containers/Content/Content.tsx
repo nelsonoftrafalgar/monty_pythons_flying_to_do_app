@@ -1,12 +1,18 @@
+import React, { useContext } from 'react'
+
 import { Archive } from '../Archive/Archive'
+import { ContentContext } from '../../context/ContentContext'
 import { List } from '../List/List'
-import React from 'react'
+import styles from './content.module.css'
 
 const Content = () => {
+  const { isVisible } = useContext(ContentContext)
   return (
-    <div>
-      <List />
-      <Archive />
+    <div className={styles.container}>
+      {isVisible ?
+        <Archive /> :
+        <List />
+      }
     </div>
   )
 }

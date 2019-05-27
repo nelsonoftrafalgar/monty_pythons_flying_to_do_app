@@ -1,12 +1,28 @@
 .container {
-  /* width: 25%; */
-  background: orange;
+  width: 100%;
+}
+
+.list {
+  height: 517px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .listItem {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  border: none;
+  background: #335c2b;
+  color: var(--font-color);
+  margin: 5px;
+  border-radius: 5px;
+}
+
+.name {
+  flex-grow: 1;
 }
 
 .date, .rating {

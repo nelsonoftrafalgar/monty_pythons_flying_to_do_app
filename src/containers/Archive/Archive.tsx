@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 
-import { ContentContext } from '../../context/ContentContext';
+import { ContentContext } from '../../context/ContentContext'
+import { Title } from '../../components/Title/Title'
 import styles from './archive.module.css'
 
 const Archive: React.FC = () => {
@@ -10,16 +11,17 @@ const Archive: React.FC = () => {
 
     return (
       <li className={styles.listItem} key={name}>
-        <p>{name}</p>
-        <p className={styles.date}>{date} {time}</p>
-        <p className={styles.rating}>{rating}</p>
+        <p className={styles.name}>{name}</p>
+        <p className={styles.date}>added: {date} {time}</p>
+        <p className={styles.rating}>rating: {rating}</p>
       </li>
     )
   })
 
   return (
     <div className={styles.container}>
-      <ul>{archivedSketches}</ul>
+      <Title text='Archive' />
+      <ul className={styles.list}>{archivedSketches}</ul>
     </div>
   )
 }

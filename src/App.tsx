@@ -56,15 +56,17 @@ const App: React.FC = () => {
 
 
   const archiveSortReducer = (state: ISketch[], action: ArchiveSortReducerAction) => {
+    console.log('hui');
+
     switch (action.type) {
       case 'date-asc':
-        return [...archiveList].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
+        return [...archive.archiveList].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
       case 'date-desc':
-        return [...archiveList].sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
+        return [...archive.archiveList].sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
       case 'rate-asc':
-        return [...archiveList].sort((a, b) => +a.rating - +b.rating)
+        return [...archive.archiveList].sort((a, b) => +a.rating - +b.rating)
       case 'rate-desc':
-        return [...archiveList].sort((a, b) => +b.rating - +a.rating)
+        return [...archive.archiveList].sort((a, b) => +b.rating - +a.rating)
       default:
         return state
     }
@@ -147,6 +149,8 @@ const App: React.FC = () => {
   }
 
   const handleSort = (e: React.FormEvent<HTMLInputElement>) => {
+    // console.log('hui');
+
     const { value } = e.currentTarget
     setGlobalState({ ...globalState, sortBy: value })
     dispatch({ type: value } as ArchiveSortReducerAction)
@@ -165,6 +169,9 @@ const App: React.FC = () => {
   }
 
   const currentSketches = sketches.length
+  const archivedSketches = archiveList.length
+
+  // console.log(archiveList);
 
   return (
     <div className={styles.app}>
@@ -179,7 +186,8 @@ const App: React.FC = () => {
           watchedSketches,
           handleSort,
           sortBy,
-          handleReset
+          handleReset,
+          archivedSketches
         }}>
           <ControlPanel />
         </ControlPanelContext.Provider>

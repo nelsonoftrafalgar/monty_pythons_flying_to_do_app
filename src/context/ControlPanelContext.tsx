@@ -5,6 +5,7 @@ interface IControlPanelContex {
   watchedSketches: number
   addedSketches: number
   currentSketches: number
+  archivedSketches: number
   handleAddSketch: () => void
   handleUndoAddSketch: () => void
   handleClearList: () => void

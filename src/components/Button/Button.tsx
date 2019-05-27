@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './button.module.css'
 
 interface IButton {
-  handler: () => void
+  handler: any
   text: string
 }
 

@@ -1,6 +1,8 @@
 import React, { useContext } from 'react'
 
-import { ContentContext } from '../../context/ContentContext';
+import { Button } from '../../components/Button/Button'
+import { ContentContext } from '../../context/ContentContext'
+import { Title } from '../../components/Title/Title'
 import styles from './list.module.css'
 
 const List: React.FC = () => {
@@ -16,12 +18,13 @@ const List: React.FC = () => {
     const { name, checked, rating } = sketch
     return (
       <li className={styles.listItem} key={name}>
-        <label>
-          Watched?
-          <input type='checkbox' value={name} checked={checked} onChange={handleCheck} />
-          {name}
+        <span className={styles.sketchName}>{name}</span>
+        <label className={styles.listLabel}>
+          watched
+          <input className={styles.checkbox} type='checkbox' value={name} checked={checked} onChange={handleCheck} />
         </label>
-        <label>
+        <label className={styles.ratingLabel}>
+          rating
           <input
             className={styles.numberInput}
             min='0'
@@ -31,7 +34,7 @@ const List: React.FC = () => {
             value={rating}
           />
         </label>
-        <button onClick={handleRemove(name)}>{checked ? 'Add to Archive' : 'Remove'}</button>
+        <Button handler={handleRemove(name)} text={checked ? 'Add to Archive' : 'Remove'} />
       </li>
     )
   })
@@ -39,9 +42,10 @@ const List: React.FC = () => {
 
   return (
     <div className={styles.container}>
+      <Title text='Sketch list' />
       <ul>{sketchList}</ul>
       {sketchLimit &&
-        <p>That's, that's enough sketches for now lad.</p>
+        <p className={styles.limitMessage}>That's, that's enough sketches for now lad.</p>
       }
     </div>
   )

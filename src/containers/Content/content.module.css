@@ -1,8 +1,8 @@
 .container {
-  width: var(--control-panel-width);
+  min-width: 800px;
   background: var(--section-bg);
   border-radius: 5px;
-  margin: 0 10px;
+  margin: 10px 10px 10px 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
