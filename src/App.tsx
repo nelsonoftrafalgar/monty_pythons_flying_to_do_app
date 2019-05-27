@@ -56,8 +56,6 @@ const App: React.FC = () => {
 
 
   const archiveSortReducer = (state: ISketch[], action: ArchiveSortReducerAction) => {
-    console.log('hui');
-
     switch (action.type) {
       case 'date-asc':
         return [...archive.archiveList].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
@@ -149,8 +147,6 @@ const App: React.FC = () => {
   }
 
   const handleSort = (e: React.FormEvent<HTMLInputElement>) => {
-    // console.log('hui');
-
     const { value } = e.currentTarget
     setGlobalState({ ...globalState, sortBy: value })
     dispatch({ type: value } as ArchiveSortReducerAction)
@@ -170,8 +166,6 @@ const App: React.FC = () => {
 
   const currentSketches = sketches.length
   const archivedSketches = archiveList.length
-
-  // console.log(archiveList);
 
   return (
     <div className={styles.app}>
