@@ -1,4 +1,4 @@
-import { IArchive, IGlobalSate, ISketch } from "../App"
+import { IArchive, IGlobalSate, ISketch } from '../state/types'
 
 import { useEffect } from "react"
 

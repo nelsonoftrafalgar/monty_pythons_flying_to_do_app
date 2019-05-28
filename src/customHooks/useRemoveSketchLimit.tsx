@@ -1,13 +1,11 @@
-import { ISketch } from "../App"
-import { SetGlobalState } from "./useGetLocalStorage"
+import { Dispatch, ISketch } from '../state/types'
+
 import { useEffect } from "react"
 
-export const useRemoveSketchLimit = (sketches: ISketch[], setGlobalState: SetGlobalState) => {
+export const useRemoveSketchLimit = (sketches: ISketch[], removeSketchLimit: Dispatch) => {
   useEffect(() => {
     if (sketches.length < 10) {
-      setGlobalState((globalState) => {
-        return { ...globalState, sketchLimit: false }
-      })
+      removeSketchLimit({ type: 'SET-SKETCH-LIMIT', payload: false })
     }
   }, [sketches])
 }

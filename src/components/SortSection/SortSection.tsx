@@ -11,10 +11,10 @@ const SortSection = () => {
   return (
     <div className={styles.container}>
       <Title text='Archive sort' />
-      <SortOption value='date-asc' sortBy={sortBy} handler={handleSort} text='Date ascending' />
-      <SortOption value='date-desc' sortBy={sortBy} handler={handleSort} text='Date descending' />
-      <SortOption value='rate-asc' sortBy={sortBy} handler={handleSort} text='Rating ascending' />
-      <SortOption value='rate-desc' sortBy={sortBy} handler={handleSort} text='Rating descending' />
+      <SortOption value='SORT-DATE-ASC' sortBy={sortBy} handler={handleSort} text='Date ascending' />
+      <SortOption value='SORT-DATE-DESC' sortBy={sortBy} handler={handleSort} text='Date descending' />
+      <SortOption value='SORT-RATE-ASC' sortBy={sortBy} handler={handleSort} text='Rating ascending' />
+      <SortOption value='SORT-RATE-DESC' sortBy={sortBy} handler={handleSort} text='Rating descending' />
     </div>
   )
 }

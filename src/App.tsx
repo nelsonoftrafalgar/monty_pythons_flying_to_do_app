@@ -1,86 +1,46 @@
-import React, { useReducer, useState } from 'react'
+import React, { useReducer } from 'react'
 
 import { Content } from './containers/Content/Content'
 import { ContentContext } from './context/ContentContext'
 import { ControlPanel } from './containers/ControlPanel/ControlPanel'
 import { ControlPanelContext } from './context/ControlPanelContext'
+import { StateReducerAction } from './state/types';
 import { data } from './db'
-import { dateToNum } from './helpers'
+import { stateReducer } from './state/reducers'
 import styles from './app.module.css'
 import { useGetLocalStorage } from './customHooks/useGetLocalStorage'
 import { useRemoveSketchLimit } from './customHooks/useRemoveSketchLimit'
 import { useSetLocalStorage } from './customHooks/useSetLocalStorage'
-import { useSortArchive } from './customHooks/useSortArchive'
-
-type ArchiveSortReducerAction = {
-  type: 'date-asc' | 'date-desc' | 'rate-asc' | 'rate-desc'
-}
-
-export interface ISketch {
-  name: string
-  checked: boolean
-  date: string
-  time: string
-  rating: string
-}
-
-export interface IArchive {
-  isVisible: boolean
-  archiveList: ISketch[]
-}
-
-export interface IGlobalSate {
-  addedSketches: number,
-  sketchLimit: boolean,
-  watchedSketches: number,
-  sortBy: string,
-}
 
 const App: React.FC = () => {
 
-  const [sketches, setSketches] = useState<ISketch[]>([])
-  const [globalState, setGlobalState] = useState<IGlobalSate>({
-    addedSketches: 0,
-    sketchLimit: false,
-    watchedSketches: 0,
-    sortBy: "",
-  })
-
-  const [archive, setArchive] = useState<IArchive>({
-    isVisible: false,
-    archiveList: []
-  })
-
-  const { isVisible, archiveList } = archive
-  const { addedSketches, sketchLimit, sortBy, watchedSketches } = globalState
-
-
-  const archiveSortReducer = (state: ISketch[], action: ArchiveSortReducerAction) => {
-    switch (action.type) {
-      case 'date-asc':
-        return [...archive.archiveList].sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
-      case 'date-desc':
-        return [...archive.archiveList].sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
-      case 'rate-asc':
-        return [...archive.archiveList].sort((a, b) => +a.rating - +b.rating)
-      case 'rate-desc':
-        return [...archive.archiveList].sort((a, b) => +b.rating - +a.rating)
-      default:
-        return state
+  const initialState = {
+    globalState: {
+      addedSketches: 0,
+      sketchLimit: false,
+      watchedSketches: 0,
+      sortBy: "",
+    },
+    sketches: [],
+    archive: {
+      isVisible: false,
+      archiveList: []
     }
   }
 
-  const [state, dispatch] = useReducer(archiveSortReducer, [])
+  const [state, dispatch] = useReducer(stateReducer, initialState)
+  const { globalState, archive, sketches } = state
+  const { watchedSketches, addedSketches, sortBy, sketchLimit } = globalState
+  const { isVisible, archiveList } = archive
   const random = Math.floor(Math.random() * data.length)
 
-  useSortArchive(setArchive, state)
-  useGetLocalStorage(setGlobalState, setSketches, setArchive)
+  useGetLocalStorage(dispatch)
   useSetLocalStorage(sketches, archive, globalState)
-  useRemoveSketchLimit(sketches, setGlobalState)
+  useRemoveSketchLimit(sketches, dispatch)
 
   const handleAddSketch = () => {
     if (sketches.length === 10) {
-      setGlobalState({ ...globalState, sketchLimit: true })
+      dispatch({ type: 'SET-SKETCH-LIMIT', payload: true })
       return
     }
     const newSketch = {
@@ -90,16 +50,15 @@ const App: React.FC = () => {
       time: '',
       rating: ''
     }
-    setSketches([...sketches, newSketch])
-    setGlobalState({ ...globalState, addedSketches: addedSketches + 1 })
+    dispatch({ type: 'ADD-SKETCH', payload: newSketch })
   }
 
   const handleUndoAddSketch = () => {
-    setSketches(sketches.filter((_, i) => i !== sketches.length - 1))
+    dispatch({ type: 'UNDO-ADD-SKETCH' })
   }
 
   const handleClearList = () => {
-    setSketches([])
+    dispatch({ type: 'CLEAR-SKETCHES' })
   }
 
   const handleCheck = (e: React.FormEvent<HTMLInputElement>) => {
@@ -113,8 +72,11 @@ const App: React.FC = () => {
       }
       return sketch
     })
-    setGlobalState({ ...globalState, watchedSketches: checked ? watchedSketches + 1 : watchedSketches - 1 })
-    setSketches(updatedList)
+    dispatch({
+      type: 'CHECK-SKETCH',
+      primaryPayload: checked ? watchedSketches + 1 : watchedSketches - 1,
+      secondaryPayload: updatedList
+    })
   }
 
   const handleRemove = (name: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -124,15 +86,14 @@ const App: React.FC = () => {
       const date = new Date()
       removedElement.date = date.toLocaleDateString()
       removedElement.time = date.toLocaleTimeString()
-      setArchive({ ...archive, archiveList: [...archive.archiveList, removedElement] })
+      dispatch({ type: 'ADD-TO-ARCHIVE', payload: [...state.archive.archiveList, removedElement] })
     }
     const updatedList = sketches.filter((sketch) => sketch.name !== name)
-    setSketches(updatedList)
+    dispatch({ type: 'REMOVE-SKETCH', payload: updatedList })
   }
 
   const handleArchiveToggle = () => {
-
-    setArchive({ ...archive, isVisible: !isVisible })
+    dispatch({ type: 'TOGGLE-ARCHIVE', payload: !isVisible })
   }
 
   const handleRate = (name: string) => (e: React.FormEvent<HTMLInputElement>) => {
@@ -143,25 +104,17 @@ const App: React.FC = () => {
       }
       return sketch
     })
-    setSketches(updatedList)
+    dispatch({ type: 'RATE-SKETCH', payload: updatedList })
   }
 
   const handleSort = (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
-    setGlobalState({ ...globalState, sortBy: value })
-    dispatch({ type: value } as ArchiveSortReducerAction)
+    dispatch({ type: value } as StateReducerAction)
   }
 
   const handleReset = () => {
     localStorage.clear()
-    setSketches([])
-    setArchive({ isVisible: false, archiveList: [] })
-    setGlobalState({
-      addedSketches: 0,
-      sketchLimit: false,
-      watchedSketches: 0,
-      sortBy: "",
-    })
+    dispatch({ type: 'MASTER-RESET', payload: initialState })
   }
 
   const currentSketches = sketches.length

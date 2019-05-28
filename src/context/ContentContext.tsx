@@ -1,4 +1,4 @@
-import { ISketch } from '../App'
+import { ISketch } from '../state/types'
 import React from 'react'
 
 interface IContentContex {

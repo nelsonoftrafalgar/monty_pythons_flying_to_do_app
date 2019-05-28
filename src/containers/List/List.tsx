@@ -14,10 +14,10 @@ const List: React.FC = () => {
     handleRate
   } = useContext(ContentContext)
 
-  const sketchList = sketches.map((sketch) => {
+  const sketchList = sketches.map((sketch, i) => {
     const { name, checked, rating } = sketch
     return (
-      <li className={styles.listItem} key={name}>
+      <li className={styles.listItem} key={`${name} ${i}`}>
         <span className={styles.sketchName}>{name}</span>
         <label className={styles.listLabel}>
           watched
