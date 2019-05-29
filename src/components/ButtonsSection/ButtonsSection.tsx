@@ -21,7 +21,7 @@ const ButtonsSection = () => {
       <Button handler={handleUndoAddSketch} text='Undo Add Sketch' />
       <Button handler={handleClearList} text='Clear List' />
       <Button handler={handleArchiveToggle} text='Toggle Archive' />
-      <Button handler={handleReset} text='Master reset' />
+      <Button critical={true} handler={handleReset} text='Master reset' />
     </div>
   )
 }

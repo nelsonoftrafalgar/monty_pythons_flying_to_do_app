@@ -2,126 +2,59 @@ import { IState, StateReducerAction } from "./types"
 
 import { dateToNum } from "../helpers"
 
-export const stateReducer = (state: IState, action: StateReducerAction): IState => {
+export const stateReducer = (draft: IState, action: StateReducerAction) => {
   const { type } = action
-  const { addedSketches } = state.globalState
-  const { archiveList } = state.archive
   switch (action.type) {
     case 'ADD-SKETCH':
-      return {
-        ...state,
-        sketches: [...state.sketches, action.payload],
-        globalState: {
-          ...state.globalState,
-          addedSketches: addedSketches + 1
-        }
-      }
+      draft.sketches = [...draft.sketches, action.payload]
+      draft.globalState.addedSketches += 1
+      break
     case 'REMOVE-SKETCH':
-      return {
-        ...state,
-        sketches: action.payload
-      }
+      draft.sketches = action.payload
+      break
     case 'ADD-TO-ARCHIVE':
-      return {
-        ...state,
-        archive: {
-          ...state.archive,
-          archiveList: action.payload
-        }
-      }
+      draft.archive.archiveList = action.payload
+      break
     case 'TOGGLE-ARCHIVE':
-      return {
-        ...state,
-        archive: {
-          ...state.archive,
-          isVisible: action.payload
-        }
-      }
+      draft.archive.isVisible = action.payload
+      break
     case 'UNDO-ADD-SKETCH':
-      return {
-        ...state,
-        sketches: state.sketches.filter((_, i) => i !== state.sketches.length - 1)
-      }
+      draft.sketches = draft.sketches.filter((_, i) => i !== draft.sketches.length - 1)
+      break
     case 'CLEAR-SKETCHES':
-      return {
-        ...state,
-        sketches: []
-      }
+      draft.sketches = []
+      break
     case 'SET-SKETCH-LIMIT':
-      return {
-        ...state,
-        globalState: {
-          ...state.globalState,
-          sketchLimit: action.payload,
-        }
-      }
+      draft.globalState.sketchLimit = action.payload
+      break
     case 'CHECK-SKETCH':
-      return {
-        ...state,
-        globalState: {
-          ...state.globalState,
-          watchedSketches: action.primaryPayload,
-        },
-        sketches: action.secondaryPayload
-      }
+      draft.globalState.watchedSketches = action.primaryPayload
+      draft.sketches = action.secondaryPayload
+      break
     case 'RATE-SKETCH':
-      return {
-        ...state,
-        sketches: action.payload
-      }
+      draft.sketches = action.payload
+      break
     case 'MASTER-RESET':
       return action.payload
     case 'SORT-DATE-ASC':
-      return {
-        ...state,
-        globalState: {
-          ...state.globalState,
-          sortBy: type
-        },
-        archive: {
-          ...state.archive,
-          archiveList: archiveList.sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
-        }
-      }
+      draft.globalState.sortBy = type
+      draft.archive.archiveList = draft.archive.archiveList.sort((a, b) => dateToNum(a.date, a.time) - dateToNum(b.date, b.time))
+      break
     case 'SORT-DATE-DESC':
-      return {
-        ...state,
-        globalState: {
-          ...state.globalState,
-          sortBy: type
-        },
-        archive: {
-          ...state.archive,
-          archiveList: archiveList.sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
-        }
-      }
+      draft.globalState.sortBy = type
+      draft.archive.archiveList = draft.archive.archiveList.sort((a, b) => dateToNum(b.date, b.time) - dateToNum(a.date, a.time))
+      break
     case 'SORT-RATE-ASC':
-      return {
-        ...state,
-        globalState: {
-          ...state.globalState,
-          sortBy: type
-        },
-        archive: {
-          ...state.archive,
-          archiveList: archiveList.sort((a, b) => +a.rating - +b.rating)
-        }
-      }
+      draft.globalState.sortBy = type
+      draft.archive.archiveList = draft.archive.archiveList.sort((a, b) => +a.rating - +b.rating)
+      break
     case 'SORT-RATE-DESC':
-      return {
-        ...state,
-        globalState: {
-          ...state.globalState,
-          sortBy: type
-        },
-        archive: {
-          ...state.archive,
-          archiveList: archiveList.sort((a, b) => +b.rating - +a.rating)
-        }
-      }
+      draft.globalState.sortBy = type
+      draft.archive.archiveList = draft.archive.archiveList.sort((a, b) => +b.rating - +a.rating)
+      break
     case 'GET-LOCAL-STORAGE':
       return action.payload
     default:
-      return state
+      return draft
   }
 }

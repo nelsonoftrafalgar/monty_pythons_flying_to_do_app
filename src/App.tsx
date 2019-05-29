@@ -1,11 +1,12 @@
+import { ISketch, StateReducerAction } from './state/types'
 import React, { useReducer } from 'react'
 
 import { Content } from './containers/Content/Content'
 import { ContentContext } from './context/ContentContext'
 import { ControlPanel } from './containers/ControlPanel/ControlPanel'
 import { ControlPanelContext } from './context/ControlPanelContext'
-import { StateReducerAction } from './state/types';
 import { data } from './db'
+import produce from 'immer'
 import { stateReducer } from './state/reducers'
 import styles from './app.module.css'
 import { useGetLocalStorage } from './customHooks/useGetLocalStorage'
@@ -28,7 +29,7 @@ const App: React.FC = () => {
     }
   }
 
-  const [state, dispatch] = useReducer(stateReducer, initialState)
+  const [state, dispatch] = useReducer(produce(stateReducer), initialState)
   const { globalState, archive, sketches } = state
   const { watchedSketches, addedSketches, sortBy, sketchLimit } = globalState
   const { isVisible, archiveList } = archive
@@ -53,17 +54,13 @@ const App: React.FC = () => {
     dispatch({ type: 'ADD-SKETCH', payload: newSketch })
   }
 
-  const handleUndoAddSketch = () => {
-    dispatch({ type: 'UNDO-ADD-SKETCH' })
-  }
-
-  const handleClearList = () => {
-    dispatch({ type: 'CLEAR-SKETCHES' })
-  }
+  const handleUndoAddSketch = () => dispatch({ type: 'UNDO-ADD-SKETCH' })
+  const handleArchiveToggle = () => dispatch({ type: 'TOGGLE-ARCHIVE', payload: !isVisible })
+  const handleClearList = () => dispatch({ type: 'CLEAR-SKETCHES' })
 
   const handleCheck = (e: React.FormEvent<HTMLInputElement>) => {
     const { checked, value } = e.currentTarget
-    const updatedList = sketches.map((sketch) => {
+    const updatedList = sketches.map((sketch: ISketch) => {
       if (sketch.name === value) {
         return {
           ...sketch,
@@ -81,24 +78,20 @@ const App: React.FC = () => {
 
   const handleRemove = (name: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const removedElement = sketches.find((sketch) => sketch.name === name)
+    const removedElement = sketches.find((sketch: ISketch) => sketch.name === name)
     if (removedElement && removedElement.checked) {
       const date = new Date()
       removedElement.date = date.toLocaleDateString()
       removedElement.time = date.toLocaleTimeString()
       dispatch({ type: 'ADD-TO-ARCHIVE', payload: [...state.archive.archiveList, removedElement] })
     }
-    const updatedList = sketches.filter((sketch) => sketch.name !== name)
+    const updatedList = sketches.filter((sketch: ISketch) => sketch.name !== name)
     dispatch({ type: 'REMOVE-SKETCH', payload: updatedList })
-  }
-
-  const handleArchiveToggle = () => {
-    dispatch({ type: 'TOGGLE-ARCHIVE', payload: !isVisible })
   }
 
   const handleRate = (name: string) => (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
-    const updatedList = sketches.map((sketch) => {
+    const updatedList = sketches.map((sketch: ISketch) => {
       if (sketch.name === name) {
         sketch.rating = value
       }

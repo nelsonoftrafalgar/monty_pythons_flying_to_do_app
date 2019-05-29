@@ -5,13 +5,14 @@ type Event = (e: React.MouseEvent<HTMLButtonElement>) => void
 type WithArg = () => (e: React.MouseEvent<HTMLButtonElement>) => void
 
 interface IButton {
+  critical?: boolean
   text: string
   handler: Event | WithArg
 }
 
-const Button: React.FC<IButton> = ({ handler, text }) => {
+const Button: React.FC<IButton> = ({ handler, text, critical }) => {
   return (
-    <button className={styles.button} onClick={handler}>{text}</button>
+    <button className={critical ? styles.buttonCritical : styles.button} onClick={handler}>{text}</button>
   )
 }
 
