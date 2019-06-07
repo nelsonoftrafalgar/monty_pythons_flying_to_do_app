@@ -23,3 +23,20 @@
 //
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+Cypress.Commands.add('multiClick', (name, number) => {
+  for (let i = 0; i < number; i++) {
+    cy.contains(`${name}`)
+      .click()
+  }
+})
+
+Cypress.Commands.add('clickButton', (name) => {
+  cy.contains(`${name}`)
+    .click()
+})
+
+Cypress.Commands.add('statItemExpectedValue', (name, value) => {
+  cy.contains(`${name}:`)
+    .children()
+    .should('contain', `${value}`)
+})
