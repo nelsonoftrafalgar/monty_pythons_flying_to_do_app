@@ -9,5 +9,5 @@ export const useGetLocalStorage = (getLocalStorage: Dispatch) => {
     if (sketches) {
       getLocalStorage({ type: 'GET-LOCAL-STORAGE', payload: { sketches, archive, globalState } })
     }
-  }, [])
+  }, [getLocalStorage])
 }

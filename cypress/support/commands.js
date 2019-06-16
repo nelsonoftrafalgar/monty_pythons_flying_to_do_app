@@ -1,28 +1,3 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This is will overwrite an existing command --
-// Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 Cypress.Commands.add('multiClick', (name, number) => {
   for (let i = 0; i < number; i++) {
     cy.contains(`${name}`)
@@ -39,4 +14,28 @@ Cypress.Commands.add('statItemExpectedValue', (name, value) => {
   cy.contains(`${name}:`)
     .children()
     .should('contain', `${value}`)
+})
+
+Cypress.Commands.add('addSketchToArchive', () => {
+  cy.get('.button_button__2De7A')
+    .filter(':contains("Add to Archive")')
+    .first()
+    .click()
+})
+
+Cypress.Commands.add('sortBy', (input, sort, selector, type) => {
+  const sortings = []
+  cy.get('[type="radio"]')
+    .eq(input)
+    .click()
+  
+  cy.get(selector)
+    .each($el => {
+      const element = type === 'date' ? 
+      +$el.context.innerText.split(' ')[2].split(":").reduce((acc, val) => acc + val) : +$el.context.innerText.replace('rating: ', '')
+      sortings.push(element)
+    })
+    .then(() => {
+      assert.deepEqual(sortings, [...sortings].sort(sort))
+    })
 })

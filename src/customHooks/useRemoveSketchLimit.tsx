@@ -7,5 +7,5 @@ export const useRemoveSketchLimit = (sketches: ISketch[], removeSketchLimit: Dis
     if (sketches.length < 10) {
       removeSketchLimit({ type: 'SET-SKETCH-LIMIT', payload: false })
     }
-  }, [sketches])
+  }, [sketches, removeSketchLimit])
 }
