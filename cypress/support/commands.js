@@ -32,7 +32,8 @@ Cypress.Commands.add('sortBy', (input, sort, selector, type) => {
   cy.get(selector)
     .each($el => {
       const element = type === 'date' ? 
-      +$el.context.innerText.split(' ')[2].split(":").reduce((acc, val) => acc + val) : +$el.context.innerText.replace('rating: ', '')
+      +$el.context.innerText.split(' ')[2].split(":").reduce((acc, val) => acc + val) : 
+      +$el.context.innerText.replace('rating: ', '')
       sortings.push(element)
     })
     .then(() => {

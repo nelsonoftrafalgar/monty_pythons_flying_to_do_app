@@ -91,9 +91,23 @@ const App: React.FC = () => {
 
   const handleRate = (name: string) => (e: React.FormEvent<HTMLInputElement>) => {
     const { value } = e.currentTarget
+
+    const hasMultipleZeros = value.replace(/[^0]/g, "").length > 1
+    if (hasMultipleZeros) {
+      return
+    }
+
+    let ratingValue: string = value
+
+    if (+value > 10) {
+      ratingValue = '10'
+    } else if (+value < 0) {
+      ratingValue = '0'
+    }
+
     const updatedList = sketches.map((sketch: ISketch) => {
       if (sketch.name === name) {
-        sketch.rating = value
+        sketch.rating = ratingValue
       }
       return sketch
     })

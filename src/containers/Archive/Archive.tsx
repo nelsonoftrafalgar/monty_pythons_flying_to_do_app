@@ -13,7 +13,7 @@ const Archive: React.FC = () => {
       <li className={styles.listItem} key={name}>
         <p className={styles.name}>{name}</p>
         <p className={styles.date}>added: {date} {time}</p>
-        <p className={styles.rating}>rating: {rating}</p>
+        <p className={styles.rating}>rating: {rating || 0}</p>
       </li>
     )
   })
