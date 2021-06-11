@@ -16,37 +16,39 @@ const List = () => {
 					return (
 						<li className={styles.listItem} key={`${name} ${i}`}>
 							<span className={styles.sketchName}>{name}</span>
-							<label className={styles.listLabel}>
-								watched
-								<input
-									className={styles.checkbox}
-									type='checkbox'
-									value={name}
-									checked={checked}
-									onChange={handleCheck}
+							<div className={styles.listControls}>
+								<label className={styles.listLabel}>
+									watched
+									<input
+										className={styles.checkbox}
+										type='checkbox'
+										value={name}
+										checked={checked}
+										onChange={handleCheck}
+									/>
+								</label>
+								<label className={styles.ratingLabel}>
+									rating
+									<select
+										data-cy='rating-select'
+										value={rating}
+										className={styles.numberSelect}
+										onChange={handleRate(name)}
+									>
+										{Array.from(Array(10).keys()).map((key: number) => {
+											return (
+												<option key={key} value={key.toString()}>
+													{key}
+												</option>
+											)
+										})}
+									</select>
+								</label>
+								<Button
+									handler={handleRemove(name)}
+									text={checked ? dictionary.addToArchive : dictionary.remove}
 								/>
-							</label>
-							<label className={styles.ratingLabel}>
-								rating
-								<select
-									data-cy='rating-select'
-									value={rating}
-									className={styles.numberSelect}
-									onChange={handleRate(name)}
-								>
-									{Array.from(Array(10).keys()).map((key: number) => {
-										return (
-											<option key={key} value={key.toString()}>
-												{key}
-											</option>
-										)
-									})}
-								</select>
-							</label>
-							<Button
-								handler={handleRemove(name)}
-								text={checked ? dictionary.addToArchive : dictionary.remove}
-							/>
+							</div>
 						</li>
 					)
 				})}

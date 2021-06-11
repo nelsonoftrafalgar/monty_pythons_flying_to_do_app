@@ -1,10 +1,17 @@
 .container {
-  min-width: 800px;
-  background: var(--section-bg);
-  border-radius: 5px;
-  margin: 10px 10px 10px 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 5px;
+	width: 50vw;
+	background: var(--section-bg);
+	border-radius: 5px;
+	margin: 10px 10px 10px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: 5px;
+}
+
+@media screen and (max-width: 1000px) {
+	.container {
+		margin: 0 0 10px 0;
+		width: 100%;
+	}
 }

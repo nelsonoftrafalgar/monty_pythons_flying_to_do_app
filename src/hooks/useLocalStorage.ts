@@ -12,9 +12,9 @@ export const useLocalStorage = (
 ) => {
 	useEffect(() => {
 		if (storageAvailable('localStorage')) {
-			const sketches = JSON.parse(localStorage.getItem('sketches') ?? '')
-			const archive = JSON.parse(localStorage.getItem('archive') ?? '')
-			const globalState = JSON.parse(localStorage.getItem('globalState') ?? '')
+			const sketches = JSON.parse(localStorage.getItem('sketches') as string)
+			const archive = JSON.parse(localStorage.getItem('archive') as string)
+			const globalState = JSON.parse(localStorage.getItem('globalState') as string)
 			if (sketches) {
 				dispatch({
 					type: ActionType.GET_LOCAL_STORAGE,

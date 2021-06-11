@@ -10,3 +10,10 @@
 	align-items: flex-start;
 	padding: 5px;
 }
+
+@media screen and (max-width: 1000px) {
+	.container {
+		width: 100%;
+		margin: 10px 0;
+	}
+}

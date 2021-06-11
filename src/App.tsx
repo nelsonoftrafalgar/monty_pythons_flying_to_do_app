@@ -10,7 +10,7 @@ const App = () => {
 		<Store>
 			<div className={styles.app}>
 				<div className={styles.container}>
-					<div className={styles['section-wrapper']}>
+					<div className={styles.sectionWrapper}>
 						<ButtonsSection />
 						<StatsSection />
 						<SortSection />
