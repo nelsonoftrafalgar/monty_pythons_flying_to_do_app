@@ -1,0 +1,9 @@
+@import './var.css';
+
+.item {
+	color: var(--font-color);
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	padding: 5px;
+}

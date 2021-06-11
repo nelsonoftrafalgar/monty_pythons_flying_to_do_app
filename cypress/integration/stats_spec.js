@@ -5,8 +5,8 @@ describe('Stats', () => {
   })
 
   it('After viewing the app there is a Stats section with 4 paragraphs', () => {
-    cy.get('.statsSection_container__3eeM1')
-    cy.get('.statItem_item__3otvw')
+    cy.get('[data-cy=stats-section]')
+    cy.get('[data-cy=stat-item]')
       .should('have.length', 4)
   })
 
@@ -40,7 +40,7 @@ describe('Stats', () => {
     cy.get('[type="checkbox"]')
       .check()
     cy.statItemExpectedValue('Watched sketches', 2)
-    cy.get('[type="checkbox"]')  
+    cy.get('[type="checkbox"]')
       .uncheck()
     cy.statItemExpectedValue('Watched sketches', 0)
   })

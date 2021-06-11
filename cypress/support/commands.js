@@ -17,7 +17,7 @@ Cypress.Commands.add('statItemExpectedValue', (name, value) => {
 })
 
 Cypress.Commands.add('addSketchToArchive', () => {
-  cy.get('.button_button__2De7A')
+  cy.get('[data-cy=button]')
     .filter(':contains("Add to Archive")')
     .first()
     .click()
@@ -28,12 +28,12 @@ Cypress.Commands.add('sortBy', (input, sort, selector, type) => {
   cy.get('[type="radio"]')
     .eq(input)
     .click()
-  
+
   cy.get(selector)
-    .each($el => {
-      const element = type === 'date' ? 
-      +$el.context.innerText.split(' ')[2].split(":").reduce((acc, val) => acc + val) : 
-      +$el.context.innerText.replace('rating: ', '')
+    .each(($el) => {
+      const element = type === 'date' ?
+      +$el[0].innerText.split(' ')[2].split(":").reduce((acc, val) => acc + val) :
+      +$el[0].innerText.replace('rating: ', '')
       sortings.push(element)
     })
     .then(() => {

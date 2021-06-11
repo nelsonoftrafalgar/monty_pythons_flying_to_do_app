@@ -1,0 +1,8 @@
+@import './var.css';
+
+.title {
+	margin-left: 5px;
+	color: var(--font-color);
+	font-size: var(--title-size);
+	margin-bottom: 10px;
+}

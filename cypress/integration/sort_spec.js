@@ -5,37 +5,32 @@ describe('Sort', () => {
     cy.multiClick('Add Sketch', 4)
     cy.get('[type="checkbox"]')
       .check()
-    cy.get('[type="number"]')
+    cy.get('[data-cy=rating-select]')
       .each(($el, idx) => {
         cy.wrap($el)
-          .type(idx + 1)
+          .select((idx + 1).toString())
       })
-    
+
     for (let i = 0; i < 4; i++) {
-      (function() {
-        cy.addSketchToArchive()
-        if (i < 3) {
-          cy.wait(1000)
-        }
-      })()
+      cy.addSketchToArchive()
     }
     cy.clickButton('Toggle Archive')
   })
-  
-  
+
+
   it('Should sort by date ascending', () => {
-    cy.sortBy(0, (a, b) => a - b, '.archive_date__1wgHF', 'date')
+    cy.sortBy(0, (a, b) => a - b, '[data-cy=archive-item-date]', 'date')
   })
 
   it('Should sort by date descending', () => {
-    cy.sortBy(1, (a, b) => b - a, '.archive_date__1wgHF', 'date')
+    cy.sortBy(1, (a, b) => b - a, '[data-cy=archive-item-date]', 'date')
   })
 
   it('Should sort by rating ascending', () => {
-    cy.sortBy(2, (a, b) => a - b, '.archive_rating__38bQN', 'rating')
+    cy.sortBy(2, (a, b) => a - b, '[data-cy=archive-item-rating]', 'rating')
   })
 
   it('Should sort by rating descending', () => {
-    cy.sortBy(3, (a, b) => b - a, '.archive_rating__38bQN', 'rating')
+    cy.sortBy(3, (a, b) => b - a, '[data-cy=archive-item-rating]', 'rating')
   })
 })
