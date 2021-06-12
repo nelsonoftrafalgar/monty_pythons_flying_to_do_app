@@ -15,9 +15,11 @@ const Archive = () => {
 						<p>{name}</p>
 						<div className={styles.listItemDetails}>
 							<p data-cy='archive-item-date'>
-								added: {date} {time}
+								{dictionary.added}: {date} {time}
 							</p>
-							<p data-cy='archive-item-rating'>rating: {rating || 0}</p>
+							<p data-cy='archive-item-rating'>
+								{dictionary.rating}: {rating || 0}
+							</p>
 						</div>
 					</li>
 				))}

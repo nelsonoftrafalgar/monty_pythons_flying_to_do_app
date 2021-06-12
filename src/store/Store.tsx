@@ -1,4 +1,11 @@
-import { ButtonEvent, ISketch, TAction, TFormInputEvent, TFormSelectEvent } from 'store/types'
+import {
+	ButtonEvent,
+	ISketch,
+	IStore,
+	TAction,
+	TFormInputEvent,
+	TFormSelectEvent,
+} from 'store/types'
 import { FC, createContext, useContext, useEffect, useReducer } from 'react'
 
 import { ActionType } from 'store/actions'
@@ -30,7 +37,7 @@ interface IStoreContext {
 
 export const StoreContext = createContext({} as IStoreContext)
 
-const initialState = {
+const initialState: IStore = {
 	globalState: {
 		addedSketches: 0,
 		sketchLimit: false,

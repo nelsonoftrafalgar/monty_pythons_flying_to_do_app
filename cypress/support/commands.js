@@ -1,3 +1,5 @@
+import {dictionary} from '../../src/dictionary'
+
 Cypress.Commands.add('multiClick', (name, number) => {
   for (let i = 0; i < number; i++) {
     cy.contains(`${name}`)
@@ -18,7 +20,7 @@ Cypress.Commands.add('statItemExpectedValue', (name, value) => {
 
 Cypress.Commands.add('addSketchToArchive', () => {
   cy.get('[data-cy=button]')
-    .filter(':contains("Add to Archive")')
+    .filter(`:contains("${dictionary.addToArchive}")`)
     .first()
     .click()
 })

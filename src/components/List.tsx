@@ -17,7 +17,7 @@ const List = () => {
 							<p>{name}</p>
 							<div className={styles.listControls}>
 								<label className={styles.listLabel}>
-									watched
+									{dictionary.watched}
 									<input
 										className={styles.checkbox}
 										type='checkbox'
@@ -27,7 +27,7 @@ const List = () => {
 									/>
 								</label>
 								<label className={styles.ratingLabel}>
-									rating
+									{dictionary.rating}
 									<select
 										data-cy='rating-select'
 										value={rating}

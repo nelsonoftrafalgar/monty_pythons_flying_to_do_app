@@ -20,4 +20,7 @@ export const dictionary = {
 	dateDescending: 'Date descending',
 	rateAscending: 'Rating ascending',
 	rateDescending: 'Rating descending',
+	watched: 'watched',
+	rating: 'rating',
+	added: 'added',
 }

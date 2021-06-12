@@ -1,3 +1,5 @@
+import {dictionary} from '../../src/dictionary'
+
 describe('Control Panel', () => {
   beforeEach(() => {
     cy.visit('/')
@@ -11,42 +13,42 @@ describe('Control Panel', () => {
       .should('have.length', 1)
   })
 
-  it('After clicking on "Add sketch" button a new sketch should appear on the Sketch list', () => {
-    cy.clickButton('Add Sketch')
+  it(`After clicking on "${dictionary.addSketch}" button a new sketch should appear on the Sketch list`, () => {
+    cy.clickButton(dictionary.addSketch)
     cy.get('[data-cy=list] ul')
       .children()
       .should('have.length', 1)
   })
 
   it('After attempting to add 11th sketch there should be an error message visible', () => {
-    cy.multiClick('Add Sketch', 11)
+    cy.multiClick(dictionary.addSketch, 11)
     cy.get('[data-cy=sketch-limit-message]')
       .should('exist')
   })
 
   it('After removing one sketch the error message should disappear', () => {
-    cy.multiClick('Add Sketch', 11)
+    cy.multiClick(dictionary.addSketch, 11)
     cy.get('[data-cy=sketch-limit-message]')
       .should('exist')
-    cy.clickButton('Undo Add Sketch')
+    cy.clickButton(dictionary.undoAddSketch)
     cy.get('[data-cy=sketch-limit-message]')
       .should('not.exist')
   })
 
-  it('After clicking "Clear list" button the sketch list sholud be empty', () => {
-    cy.clickButton('Clear List')
+  it(`After clicking "${dictionary.clearList}" button the sketch list sholud be empty`, () => {
+    cy.clickButton(dictionary.clearList)
     cy.get('[data-cy=list] ul')
       .children()
       .should('not.exist')
   })
 
-  it('Clicking "Toggle Archive" should toggle between sketch list and archive', () => {
-    cy.clickButton('Toggle Archive')
+  it(`Clicking "${dictionary.toggleArchive}" should toggle between sketch list and archive`, () => {
+    cy.clickButton(dictionary.toggleArchive)
     cy.get('[data-cy=list]')
       .should('not.exist')
     cy.get('[data-cy=archive]')
       .should('exist')
-    cy.clickButton('Toggle Archive')
+    cy.clickButton(dictionary.toggleArchive)
     cy.get('[data-cy=archive]')
       .should('not.exist')
     cy.get('[data-cy=list]')

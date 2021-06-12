@@ -1,8 +1,10 @@
+import {dictionary} from '../../src/dictionary'
+
 describe('Sort', () => {
   before(() => {
     cy.visit('/')
-    cy.clickButton('Master reset')
-    cy.multiClick('Add Sketch', 4)
+    cy.clickButton(dictionary.masterReset)
+    cy.multiClick(dictionary.addSketch, 4)
     cy.get('[type="checkbox"]')
       .check()
     cy.get('[data-cy=rating-select]')
@@ -14,7 +16,7 @@ describe('Sort', () => {
     for (let i = 0; i < 4; i++) {
       cy.addSketchToArchive()
     }
-    cy.clickButton('Toggle Archive')
+    cy.clickButton(dictionary.toggleArchive)
   })
 
 
