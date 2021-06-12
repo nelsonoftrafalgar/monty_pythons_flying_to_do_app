@@ -3,33 +3,18 @@
 }
 
 .list {
-	height: 542px;
+	height: var(--archive-height);
 	overflow-y: scroll;
 	scrollbar-width: none;
 }
 
 .listItem {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	padding: 5px 10px;
-	border: none;
-	background: #335c2b;
-	color: var(--font-color);
-	margin: 5px;
-	border-radius: 5px;
-	flex-wrap: wrap;
+	composes: item from 'styles/shared.module.css';
+	background: var(--archive-bg);
 }
 
 .listItemDetails {
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
-}
-
-.name {
-	flex-grow: 1;
+	composes: itemDetails from 'styles/shared.module.css';
 }
 
 @media screen and (max-width: 1000px) {

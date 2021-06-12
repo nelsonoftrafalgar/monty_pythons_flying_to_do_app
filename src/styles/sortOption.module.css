@@ -1,10 +1,10 @@
 @import './var.css';
 
 .option {
-	margin: 5px;
+	margin: var(--margin-sm);
 	color: var(--font-color);
 }
 
 .input {
-	margin-right: 5px;
+	margin-right: var(--margin-sm);
 }

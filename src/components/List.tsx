@@ -14,7 +14,7 @@ const List = () => {
 				{sketches.map(({ name, checked, rating }, i) => {
 					return (
 						<li className={styles.listItem} key={`${name} ${i}`}>
-							<span className={styles.sketchName}>{name}</span>
+							<p>{name}</p>
 							<div className={styles.listControls}>
 								<label className={styles.listLabel}>
 									watched

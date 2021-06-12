@@ -1,12 +1,6 @@
 .container {
-	width: var(--control-panel-width);
-	background: var(--section-bg);
-	border-radius: 5px;
-	margin: 0 10px;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	padding: 5px;
+	composes: controlPanelContainer from 'styles/shared.module.css';
+	margin: 0 var(--margin-md);
 }
 
 @media screen and (max-width: 1000px) {

@@ -1,0 +1,28 @@
+.controlPanelContainer {
+	width: var(--control-panel-width);
+	background: var(--section-bg);
+	border-radius: var(--border-radius);
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	padding: var(--padding-sm);
+}
+
+.item {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--padding-sm) var(--padding-lg);
+	border: none;
+	color: var(--font-color);
+	margin: var(--margin-sm);
+	border-radius: var(--border-radius);
+	flex-wrap: wrap;
+}
+
+.itemDetails {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}

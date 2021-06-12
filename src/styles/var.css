@@ -1,7 +1,19 @@
 :root {
-  --font-color: #86949e;
-  --section-bg: #1b2b38;
-  --container-bg: #141e25;
-  --title-size: 20px;
-  --control-panel-width: 250px;
+	--font-color: #86949e;
+	--section-bg: #1b2b38;
+	--container-bg: #141e25;
+	--archive-bg: #335c2b;
+	--button-bg: #3c4f59;
+	--critical-bg: #5c2b2b;
+	--list-bg: #113f69;
+	--message-color: #f45042;
+	--title-size: 20px;
+	--control-panel-width: 250px;
+	--archive-height: 542px;
+	--border-radius: 5px;
+	--padding-sm: 5px;
+	--padding-lg: 10px;
+	--margin-sm: 5px;
+	--margin-md: 10px;
+	--margin-lg: 20px;
 }

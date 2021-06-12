@@ -12,7 +12,7 @@ const Archive = () => {
 			<ul className={styles.list}>
 				{archiveList.map(({ name, date, time, rating }) => (
 					<li className={styles.listItem} key={name}>
-						<p className={styles.name}>{name}</p>
+						<p>{name}</p>
 						<div className={styles.listItemDetails}>
 							<p data-cy='archive-item-date'>
 								added: {date} {time}

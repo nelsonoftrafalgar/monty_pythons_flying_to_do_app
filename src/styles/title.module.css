@@ -1,8 +1,8 @@
 @import './var.css';
 
 .title {
-	margin-left: 5px;
+	margin-left: var(--margin-sm);
 	color: var(--font-color);
 	font-size: var(--title-size);
-	margin-bottom: 10px;
+	margin-bottom: var(--margin-md);
 }

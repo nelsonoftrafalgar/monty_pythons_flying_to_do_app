@@ -2,23 +2,9 @@
 	width: 100%;
 }
 
-.sketchName {
-	flex-grow: 1;
-	margin-right: 20px;
-}
-
 .listItem {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: center;
-	padding: 5px 10px;
-	border: none;
-	background: #113f69;
-	color: var(--font-color);
-	margin: 5px;
-	border-radius: 5px;
-	flex-wrap: wrap;
+	composes: item from 'styles/shared.module.css';
+	background: var(--list-bg);
 }
 
 .ratingLabel {
@@ -28,7 +14,7 @@
 }
 
 .checkbox {
-	margin: 0 10px;
+	margin: 0 var(--margin-md);
 }
 
 .listLabel {
@@ -38,15 +24,13 @@
 
 .numberSelect {
 	width: 40px;
-	margin: 0 10px;
+	margin: 0 var(--margin-md);
 }
 
 .limitMessage {
-	color: #f45042;
+	color: var(--message-color);
 }
 
 .listControls {
-	display: flex;
-	width: 100%;
-	justify-content: space-between;
+	composes: itemDetails from 'styles/shared.module.css';
 }
