@@ -1,11 +1,10 @@
-import { StoreContext } from 'store/Store'
 import { Title } from 'components/Title'
 import { dictionary } from 'dictionary'
 import styles from 'styles/archive.module.css'
-import { useContext } from 'react'
+import { useStore } from 'store/Store'
 
 const Archive = () => {
-	const { archiveList } = useContext(StoreContext)
+	const { archiveList } = useStore()
 
 	return (
 		<div data-cy='archive' className={styles.container}>

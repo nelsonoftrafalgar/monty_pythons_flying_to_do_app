@@ -1,13 +1,11 @@
 import StatItem from 'components/StatItem'
-import { StoreContext } from 'store/Store'
 import { Title } from 'components/Title'
 import { dictionary } from 'dictionary'
 import styles from 'styles/statsSection.module.css'
-import { useContext } from 'react'
+import { useStore } from 'store/Store'
 
 const StatsSection = () => {
-	const { addedSketches, currentSketches, watchedSketches, archivedSketches } =
-		useContext(StoreContext)
+	const { addedSketches, currentSketches, watchedSketches, archivedSketches } = useStore()
 
 	return (
 		<div data-cy='stats-section' className={styles.container}>

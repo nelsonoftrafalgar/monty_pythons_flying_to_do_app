@@ -1,12 +1,11 @@
 import Button from 'components/Button'
-import { StoreContext } from 'store/Store'
 import { Title } from 'components/Title'
 import { dictionary } from 'dictionary'
 import styles from 'styles/list.module.css'
-import { useContext } from 'react'
+import { useStore } from 'store/Store'
 
 const List = () => {
-	const { sketches, handleCheck, handleRemove, sketchLimit, handleRate } = useContext(StoreContext)
+	const { sketches, handleCheck, handleRemove, sketchLimit, handleRate } = useStore()
 
 	return (
 		<div data-cy='list' className={styles.container}>

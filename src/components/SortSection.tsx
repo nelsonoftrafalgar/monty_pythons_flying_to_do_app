@@ -1,13 +1,12 @@
 import { ActionType } from 'store/actions'
 import SortOption from 'components/SortOption'
-import { StoreContext } from 'store/Store'
 import { Title } from 'components/Title'
 import { dictionary } from 'dictionary'
 import styles from 'styles/sortSection.module.css'
-import { useContext } from 'react'
+import { useStore } from 'store/Store'
 
 const SortSection = () => {
-	const { sortBy, handleSort } = useContext(StoreContext)
+	const { sortBy, handleSort } = useStore()
 
 	return (
 		<div className={styles.container}>

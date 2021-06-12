@@ -1,5 +1,5 @@
 import { ButtonEvent, ISketch, TAction, TFormInputEvent, TFormSelectEvent } from 'store/types'
-import { FC, createContext, useEffect, useReducer } from 'react'
+import { FC, createContext, useContext, useEffect, useReducer } from 'react'
 
 import { ActionType } from 'store/actions'
 import { data } from 'db'
@@ -159,3 +159,5 @@ const Store: FC = ({ children }) => {
 }
 
 export default Store
+
+export const useStore = () => useContext(StoreContext)

@@ -1,9 +1,8 @@
 import Button from 'components/Button'
-import { StoreContext } from 'store/Store'
 import { Title } from 'components/Title'
 import { dictionary } from 'dictionary'
 import styles from 'styles/buttonsSection.module.css'
-import { useContext } from 'react'
+import { useStore } from 'store/Store'
 
 const ButtonsSection = () => {
 	const {
@@ -12,7 +11,7 @@ const ButtonsSection = () => {
 		handleUndoAddSketch,
 		handleReset,
 		handleClearList,
-	} = useContext(StoreContext)
+	} = useStore()
 
 	return (
 		<div data-cy='button-section' className={styles.container}>
